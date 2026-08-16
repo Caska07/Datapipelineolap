@@ -1,0 +1,52 @@
+{
+    "name": "PL_Load_Weer",
+    "properties": {
+        "activities": [
+            {
+                "name": "Lookup_Locaties",
+                "type": "Lookup",
+                "typeProperties": {
+                    "source": {
+                        "type": "AzureSqlSource",
+                        "sqlReaderQuery": "SELECT DISTINCT LEFT(POSTCODE,4) AS Postcode4 FROM stg.ADRES WHERE POSTCODE IS NOT NULL"
+                    },
+                    "dataset": { "referenceName": "DS_Staging_ADRES", "type": "DatasetReference" },
+                    "firstRowOnly": false
+                }
+            },
+            {
+                "name": "ForEach_Locatie",
+                "type": "ForEach",
+                "dependsOn": [{ "activity": "Lookup_Locaties", "dependencyConditions": ["Succeeded"] }],
+                "typeProperties": {
+                    "items": { "value": "@activity('Lookup_Locaties').output.value", "type": "Expression" },
+                    "isSequential": false,
+                    "batchCount": 10,
+                    "activities": [
+                        {
+                            "name": "Copy_WeerPerLocatie",
+                            "type": "Copy",
+                            "inputs": [{
+                                "referenceName": "DS_Weer_REST",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "postcode": { "value": "@item().Postcode4", "type": "Expression" },
+                                    "vanaf": { "value": "@pipeline().parameters.StartDatum", "type": "Expression" }
+                                }
+                            }],
+                            "outputs": [{ "referenceName": "DS_Staging_WEER", "type": "DatasetReference" }],
+                            "typeProperties": {
+                                "source": { "type": "RestSource", "httpRequestTimeout": "00:01:40" },
+                                "sink": { "type": "AzureSqlSink", "writeBehavior": "insert" }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "StartDatum": { "type": "string", "defaultValue": "2024-01-01" }
+        },
+        "annotations": []
+    }
+}

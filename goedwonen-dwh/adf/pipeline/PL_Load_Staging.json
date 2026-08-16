@@ -1,0 +1,89 @@
+{
+    "name": "PL_Load_Staging",
+    "properties": {
+        "activities": [
+            {
+                "name": "Copy_Adres",
+                "type": "Copy",
+                "inputs": [{ "referenceName": "DS_OLTP_ADRES", "type": "DatasetReference" }],
+                "outputs": [{ "referenceName": "DS_Staging_ADRES", "type": "DatasetReference" }],
+                "typeProperties": {
+                    "source": { "type": "AzureSqlSource" },
+                    "sink": { "type": "AzureSqlSink", "preCopyScript": "TRUNCATE TABLE stg.ADRES" }
+                }
+            },
+            {
+                "name": "Copy_Objecten",
+                "type": "Copy",
+                "inputs": [{ "referenceName": "DS_OLTP_OBJECTEN", "type": "DatasetReference" }],
+                "outputs": [{ "referenceName": "DS_Staging_OBJECTEN", "type": "DatasetReference" }],
+                "typeProperties": {
+                    "source": { "type": "AzureSqlSource" },
+                    "sink": { "type": "AzureSqlSink", "preCopyScript": "TRUNCATE TABLE stg.OBJECTEN" }
+                }
+            },
+            {
+                "name": "Copy_Complex",
+                "type": "Copy",
+                "inputs": [{ "referenceName": "DS_OLTP_COMPLEX", "type": "DatasetReference" }],
+                "outputs": [{ "referenceName": "DS_Staging_COMPLEX", "type": "DatasetReference" }],
+                "typeProperties": {
+                    "source": { "type": "AzureSqlSource" },
+                    "sink": { "type": "AzureSqlSink", "preCopyScript": "TRUNCATE TABLE stg.COMPLEX" }
+                }
+            },
+            {
+                "name": "Copy_Werksoort",
+                "type": "Copy",
+                "inputs": [{ "referenceName": "DS_OLTP_WERKSOORT", "type": "DatasetReference" }],
+                "outputs": [{ "referenceName": "DS_Staging_WERKSOORT", "type": "DatasetReference" }],
+                "typeProperties": {
+                    "source": { "type": "AzureSqlSource" },
+                    "sink": { "type": "AzureSqlSink", "preCopyScript": "TRUNCATE TABLE stg.WERKSOORT" }
+                }
+            },
+            {
+                "name": "Copy_Project",
+                "type": "Copy",
+                "inputs": [{ "referenceName": "DS_OLTP_PROJECT", "type": "DatasetReference" }],
+                "outputs": [{ "referenceName": "DS_Staging_PROJECT", "type": "DatasetReference" }],
+                "typeProperties": {
+                    "source": { "type": "AzureSqlSource" },
+                    "sink": { "type": "AzureSqlSink", "preCopyScript": "TRUNCATE TABLE stg.PROJECT" }
+                }
+            },
+            {
+                "name": "Copy_Projectregel",
+                "type": "Copy",
+                "inputs": [{ "referenceName": "DS_OLTP_PROJECTREGEL", "type": "DatasetReference" }],
+                "outputs": [{ "referenceName": "DS_Staging_PROJECTREGEL", "type": "DatasetReference" }],
+                "typeProperties": {
+                    "source": { "type": "AzureSqlSource" },
+                    "sink": { "type": "AzureSqlSink", "preCopyScript": "TRUNCATE TABLE stg.PROJECTREGEL" }
+                }
+            },
+            {
+                "name": "Copy_Werkverzoek",
+                "type": "Copy",
+                "inputs": [{ "referenceName": "DS_OLTP_WERKVERZOEK", "type": "DatasetReference" }],
+                "outputs": [{ "referenceName": "DS_Staging_WERKVERZOEK", "type": "DatasetReference" }],
+                "typeProperties": {
+                    "source": { "type": "AzureSqlSource" },
+                    "sink": { "type": "AzureSqlSink", "preCopyScript": "TRUNCATE TABLE stg.WERKVERZOEK" }
+                }
+            },
+            {
+                "name": "Copy_Werkopdracht",
+                "type": "Copy",
+                "dependsOn": [{ "activity": "Copy_Werkverzoek", "dependencyConditions": ["Succeeded"] }],
+                "inputs": [{ "referenceName": "DS_OLTP_WERKOPDRACHT", "type": "DatasetReference" }],
+                "outputs": [{ "referenceName": "DS_Staging_WERKOPDRACHT", "type": "DatasetReference" }],
+                "typeProperties": {
+                    "source": { "type": "AzureSqlSource" },
+                    "sink": { "type": "AzureSqlSink", "preCopyScript": "TRUNCATE TABLE stg.WERKOPDRACHT" }
+                }
+            }
+        ],
+        "annotations": []
+    }
+}

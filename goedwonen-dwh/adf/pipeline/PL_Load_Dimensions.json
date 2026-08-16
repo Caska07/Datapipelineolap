@@ -1,0 +1,51 @@
+{
+    "name": "PL_Load_Dimensions",
+    "properties": {
+        "activities": [
+            {
+                "name": "SP_Load_DimLocatie",
+                "type": "SqlServerStoredProcedure",
+                "linkedServiceName": { "referenceName": "LS_AzureSqlDWH", "type": "LinkedServiceReference" },
+                "typeProperties": { "storedProcedureName": "[dbo].[usp_Load_DimLocatie]" }
+            },
+            {
+                "name": "SP_Load_DimObject",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [{ "activity": "SP_Load_DimLocatie", "dependencyConditions": ["Succeeded"] }],
+                "linkedServiceName": { "referenceName": "LS_AzureSqlDWH", "type": "LinkedServiceReference" },
+                "typeProperties": { "storedProcedureName": "[dbo].[usp_Load_DimObject]" }
+            },
+            {
+                "name": "SP_Load_DimWerksoort",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [{ "activity": "SP_Load_DimLocatie", "dependencyConditions": ["Succeeded"] }],
+                "linkedServiceName": { "referenceName": "LS_AzureSqlDWH", "type": "LinkedServiceReference" },
+                "typeProperties": { "storedProcedureName": "[dbo].[usp_Load_DimWerksoort]" }
+            },
+            {
+                "name": "SP_Load_DimProject",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [{ "activity": "SP_Load_DimLocatie", "dependencyConditions": ["Succeeded"] }],
+                "linkedServiceName": { "referenceName": "LS_AzureSqlDWH", "type": "LinkedServiceReference" },
+                "typeProperties": { "storedProcedureName": "[dbo].[usp_Load_DimProject]" }
+            },
+            {
+                "name": "SP_Load_DimMelding",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [{ "activity": "SP_Load_DimLocatie", "dependencyConditions": ["Succeeded"] }],
+                "linkedServiceName": { "referenceName": "LS_AzureSqlDWH", "type": "LinkedServiceReference" },
+                "typeProperties": { "storedProcedureName": "[dbo].[usp_Load_DimMelding]" }
+            },
+            {
+                "name": "SP_Load_DimWeer",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                    { "activity": "SP_Load_DimObject", "dependencyConditions": ["Succeeded"] }
+                ],
+                "linkedServiceName": { "referenceName": "LS_AzureSqlDWH", "type": "LinkedServiceReference" },
+                "typeProperties": { "storedProcedureName": "[dbo].[usp_Load_DimWeer]" }
+            }
+        ],
+        "annotations": []
+    }
+}

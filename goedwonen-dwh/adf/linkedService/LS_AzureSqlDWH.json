@@ -1,0 +1,13 @@
+{
+    "name": "LS_AzureSqlDWH",
+    "properties": {
+        "type": "AzureSqlDatabase",
+        "typeProperties": {
+            "connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=<jouw-sql-server>.database.windows.net;Initial Catalog=<dwh-database-naam>;User ID=<gebruiker>"
+        },
+        "connectVia": {
+            "referenceName": "<jouw-integration-runtime>",
+            "type": "IntegrationRuntimeReference"
+        }
+    }
+}

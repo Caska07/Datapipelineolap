@@ -1,0 +1,14 @@
+{
+    "name": "PL_Load_Fact",
+    "properties": {
+        "activities": [
+            {
+                "name": "SP_Load_FactWerk",
+                "type": "SqlServerStoredProcedure",
+                "linkedServiceName": { "referenceName": "LS_AzureSqlDWH", "type": "LinkedServiceReference" },
+                "typeProperties": { "storedProcedureName": "[dbo].[usp_Load_FactWerk]" }
+            }
+        ],
+        "annotations": []
+    }
+}

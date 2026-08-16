@@ -1,0 +1,47 @@
+{
+    "name": "PL_Master_Load_DWH",
+    "properties": {
+        "activities": [
+            {
+                "name": "Exec_Load_Staging",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": { "referenceName": "PL_Load_Staging", "type": "PipelineReference" },
+                    "waitOnCompletion": true
+                }
+            },
+            {
+                "name": "Exec_Load_Weer",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": { "referenceName": "PL_Load_Weer", "type": "PipelineReference" },
+                    "waitOnCompletion": true
+                }
+            },
+            {
+                "name": "Exec_Load_Dimensions",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    { "activity": "Exec_Load_Staging", "dependencyConditions": ["Succeeded"] },
+                    { "activity": "Exec_Load_Weer", "dependencyConditions": ["Succeeded"] }
+                ],
+                "typeProperties": {
+                    "pipeline": { "referenceName": "PL_Load_Dimensions", "type": "PipelineReference" },
+                    "waitOnCompletion": true
+                }
+            },
+            {
+                "name": "Exec_Load_Fact",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    { "activity": "Exec_Load_Dimensions", "dependencyConditions": ["Succeeded"] }
+                ],
+                "typeProperties": {
+                    "pipeline": { "referenceName": "PL_Load_Fact", "type": "PipelineReference" },
+                    "waitOnCompletion": true
+                }
+            }
+        ],
+        "annotations": []
+    }
+}
